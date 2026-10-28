@@ -1,0 +1,88 @@
+
+<!DOCTYPE html>
+<html lang="lt" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Korepetitoriaus profilis</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+</head>
+
+<body class="bg-light">
+
+<div class="container py-5" style="max-width: 750px;">
+
+    <a th:href="@{/dashboard}" class="text-decoration-none">
+        ← Grįžti į paskyrą
+    </a>
+
+    <div class="card shadow-sm mt-3">
+        <div class="card-body p-4">
+
+            <h2>Korepetitoriaus profilis</h2>
+
+            <p class="text-muted">
+                Užpildykite informaciją apie teikiamas mokymo paslaugas.
+            </p>
+
+            <div th:if="${param.saved}" class="alert alert-success">
+                Profilis išsaugotas. Laukiama administratoriaus patvirtinimo.
+            </div>
+
+            <div th:if="${error}" class="alert alert-danger"
+                 th:text="${error}"></div>
+
+            <div th:if="${profile.approved}" class="alert alert-success">
+                Profilis patvirtintas.
+            </div>
+
+            <form th:action="@{/tutor/profile}" method="post">
+
+                <div class="mb-3">
+                    <label class="form-label">Mokomas dalykas</label>
+                    <input type="text" name="subject"
+                           class="form-control" required
+                           th:value="${profile.subject}">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Mokymo lygis</label>
+                    <input type="text" name="educationLevel"
+                           class="form-control" required
+                           placeholder="Pvz., 5–8 klasės"
+                           th:value="${profile.educationLevel}">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Valandinė kaina (€)</label>
+                    <input type="number" name="hourlyRate"
+                           class="form-control" min="0" step="0.01"
+                           required th:value="${profile.hourlyRate}">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Patirtis (metais)</label>
+                    <input type="number" name="experienceYears"
+                           class="form-control" min="0"
+                           required th:value="${profile.experienceYears}">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Aprašymas</label>
+                    <textarea name="description" class="form-control"
+                              rows="5" maxlength="2000"
+                              th:text="${profile.description}"></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    Išsaugoti profilį
+                </button>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,53 @@
+
+<!DOCTYPE html>
+<html lang="lt" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registracija | Korepetavimo sistema</title>
+</head>
+<body>
+
+<h1>Registracija</h1>
+
+<p th:if="${error}" th:text="${error}" style="color:red;"></p>
+
+<form th:action="@{/register}" method="post">
+
+    <label>Vardas</label>
+    <input type="text" name="firstName" required maxlength="100">
+
+    <br><br>
+
+    <label>Pavardė</label>
+    <input type="text" name="lastName" required maxlength="100">
+
+    <br><br>
+
+    <label>El. paštas</label>
+    <input type="email" name="email" required>
+
+    <br><br>
+
+    <label>Slaptažodis</label>
+    <input type="password" name="password"
+           required minlength="8">
+
+    <br><br>
+
+    <label>Kas jūs esate?</label>
+    <select name="role" required>
+        <option value="STUDENT">Mokinys</option>
+        <option value="GUARDIAN">Tėvas / globėjas</option>
+        <option value="TUTOR">Korepetitorius</option>
+    </select>
+
+    <br><br>
+
+    <button type="submit">Registruotis</button>
+
+</form>
+
+<p>Jau turite paskyrą? <a th:href="@{/login}">Prisijungti</a></p>
+
+</body>
+</html>
