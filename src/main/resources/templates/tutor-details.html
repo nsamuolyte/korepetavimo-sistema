@@ -10,6 +10,9 @@
 
 <body class="bg-light">
 
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+
 <div class="container py-5" style="max-width: 800px;">
 
     <a th:href="@{/tutors}" class="text-decoration-none">
@@ -54,6 +57,23 @@
             <p th:text="${tutor.description}">
                 Korepetitoriaus aprašymas
             </p>
+
+            <div th:unless="${#lists.isEmpty(packages)}" class="mt-4">
+                <h5>Pamokų paketai</h5>
+                <div class="list-group">
+                    <div class="list-group-item d-flex justify-content-between align-items-center"
+                         th:each="p : ${packages}">
+                        <div>
+                            <div class="fw-semibold" th:text="${p.name}">5 pamokų paketas</div>
+                            <div class="small text-muted"
+                                 th:text="|${p.lessonCount} pamokos · ${@fmt.money(p.price)}|"></div>
+                        </div>
+                        <a th:if="${canBook}"
+                           th:href="@{/payments/checkout/{id}(id=${p.id})}"
+                           class="btn btn-sm btn-outline-primary">Pirkti</a>
+                    </div>
+                </div>
+            </div>
 
             <div class="mt-4">
                 <a th:if="${canBook}"

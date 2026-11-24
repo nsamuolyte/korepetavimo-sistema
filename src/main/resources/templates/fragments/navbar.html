@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="lt" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<!-- Bendras viršutinis meniu. Įterpiamas: <div th:replace="~{fragments/navbar :: navbar}"></div> -->
+<nav th:fragment="navbar" class="navbar navbar-dark bg-primary shadow-sm">
+    <div class="container d-flex flex-wrap align-items-center gap-2">
+
+        <a class="navbar-brand fw-semibold"
+           th:href="${navUser != null} ? @{/dashboard} : @{/}">
+            Korepetavimo sistema
+        </a>
+
+        <div class="d-flex flex-wrap align-items-center gap-3 ms-auto">
+
+            <a class="link-light text-decoration-none" th:href="@{/tutors}">Korepetitoriai</a>
+
+            <th:block th:if="${navUser != null}">
+                <a class="link-light text-decoration-none" th:href="@{/lessons}">Pamokos</a>
+
+                <a th:if="${navUser.role.name() == 'TUTOR'}"
+                   class="link-light text-decoration-none"
+                   th:href="@{/tutor/availability}">Darbo laikas</a>
+
+                <a th:if="${navUser.role.name() == 'TUTOR'}"
+                   class="link-light text-decoration-none"
+                   th:href="@{/tutor/earnings}">Uždarbis</a>
+
+                <a th:if="${navUser.role.name() == 'STUDENT' or navUser.role.name() == 'GUARDIAN'}"
+                   class="link-light text-decoration-none"
+                   th:href="@{/payments}">Mokėjimai</a>
+
+                <a class="link-light text-decoration-none" th:href="@{/dashboard}">Paskyra</a>
+
+                <span class="text-white-50 small"
+                      th:text="|${navUser.firstName} ${navUser.lastName}|">Vardas Pavardė</span>
+
+                <form th:action="@{/logout}" method="post" class="m-0">
+                    <button type="submit" class="btn btn-sm btn-outline-light">Atsijungti</button>
+                </form>
+            </th:block>
+
+            <th:block th:if="${navUser == null}">
+                <a class="btn btn-sm btn-light" th:href="@{/login}">Prisijungti</a>
+                <a class="btn btn-sm btn-outline-light" th:href="@{/register}">Registruotis</a>
+            </th:block>
+        </div>
+    </div>
+</nav>
+
+</body>
+</html>

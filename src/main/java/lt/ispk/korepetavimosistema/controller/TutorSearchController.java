@@ -1,5 +1,6 @@
 package lt.ispk.korepetavimosistema.controller;
 
+import lt.ispk.korepetavimosistema.repository.LessonPackageRepository;
 import lt.ispk.korepetavimosistema.repository.TutorProfileRepository;
 
 import org.springframework.http.HttpStatus;
@@ -16,10 +17,13 @@ import java.math.BigDecimal;
 public class TutorSearchController {
 
     private final TutorProfileRepository tutorRepository;
+    private final LessonPackageRepository lessonPackageRepository;
 
     public TutorSearchController(
-            TutorProfileRepository tutorRepository) {
+            TutorProfileRepository tutorRepository,
+            LessonPackageRepository lessonPackageRepository) {
         this.tutorRepository = tutorRepository;
+        this.lessonPackageRepository = lessonPackageRepository;
     }
 
     @GetMapping
@@ -60,6 +64,8 @@ public class TutorSearchController {
                         || a.getAuthority().equals("ROLE_GUARDIAN"));
 
         model.addAttribute("tutor", tutor);
+        model.addAttribute("packages",
+                lessonPackageRepository.findByTutorIdAndActiveTrueOrderByPriceAsc(tutor.getUser().getId()));
         model.addAttribute("loggedIn", loggedIn);
         model.addAttribute("canBook", canBook);
 

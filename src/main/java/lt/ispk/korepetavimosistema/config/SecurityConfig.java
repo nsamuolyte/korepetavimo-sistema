@@ -51,6 +51,8 @@ public class SecurityConfig {
                 .requestMatchers("/student/**").hasRole("STUDENT")
                 // Rezervuoti pamokas gali mokiniai ir globėjai (US-M03, US-T03).
                 .requestMatchers("/lessons/book/**").hasAnyRole("STUDENT", "GUARDIAN")
+                // Pirkti paketus gali mokiniai ir globėjai (US-M09, US-T08).
+                .requestMatchers("/payments/checkout/**").hasAnyRole("STUDENT", "GUARDIAN")
                 .anyRequest().authenticated()
         );
 

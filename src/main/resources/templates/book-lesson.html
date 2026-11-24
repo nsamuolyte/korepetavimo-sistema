@@ -9,6 +9,9 @@
 </head>
 <body class="bg-light">
 
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+
 <div class="container py-5" style="max-width: 900px;">
 
     <a th:href="@{/tutors/{id}(id=${profile.id})}" class="text-decoration-none">

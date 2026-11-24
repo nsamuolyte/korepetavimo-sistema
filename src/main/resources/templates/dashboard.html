@@ -8,6 +8,9 @@
 </head>
 <body class="bg-light">
 
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+
 <div class="container mt-5" style="max-width: 900px;">
 
     <h1>Sveiki, <span th:text="${firstName}">Naudotojau</span>!</h1>
@@ -25,6 +28,7 @@
     <div th:if="${role.name() == 'STUDENT'}" class="d-flex flex-wrap gap-2 mt-3">
         <a th:href="@{/tutors}" class="btn btn-primary">Ieškoti korepetitoriaus</a>
         <a th:href="@{/lessons}" class="btn btn-primary">Mano pamokos</a>
+        <a th:href="@{/payments}" class="btn btn-outline-primary">Mokėjimai ir paketai</a>
         <a th:href="@{/student/guardians}" class="btn btn-outline-primary">Mano globėjai</a>
     </div>
 
@@ -32,6 +36,7 @@
     <div th:if="${role.name() == 'GUARDIAN'}" class="d-flex flex-wrap gap-2 mt-3">
         <a th:href="@{/tutors}" class="btn btn-primary">Ieškoti korepetitoriaus</a>
         <a th:href="@{/lessons}" class="btn btn-primary">Vaikų pamokos</a>
+        <a th:href="@{/payments}" class="btn btn-outline-primary">Mokėjimai ir paketai</a>
         <a th:href="@{/guardian/students}" class="btn btn-outline-primary">Mano mokiniai</a>
     </div>
 
@@ -40,6 +45,8 @@
         <a th:href="@{/lessons}" class="btn btn-primary">Mano pamokos</a>
         <a th:href="@{/tutor/lessons/new}" class="btn btn-primary">Sukurti pamoką</a>
         <a th:href="@{/tutor/availability}" class="btn btn-outline-primary">Darbo laikas</a>
+        <a th:href="@{/tutor/earnings}" class="btn btn-outline-primary">Uždarbis ir išmokos</a>
+        <a th:href="@{/tutor/packages}" class="btn btn-outline-primary">Pamokų paketai</a>
         <a th:href="@{/tutor/profile}" class="btn btn-outline-primary">Tvarkyti korepetitoriaus profilį</a>
     </div>
 
