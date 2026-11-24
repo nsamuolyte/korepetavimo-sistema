@@ -30,7 +30,7 @@
             <form th:action="@{/tutors}" method="get"
                   class="row g-3">
 
-                <div class="col-md-5">
+                <div class="col-md-4">
                     <label class="form-label">Mokomas dalykas</label>
                     <input type="text" name="subject"
                            class="form-control"
@@ -38,7 +38,7 @@
                            th:value="${subject}">
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label class="form-label">Maksimali kaina (€)</label>
                     <input type="number" name="maxPrice"
                            min="0" step="0.01"
@@ -46,7 +46,13 @@
                            th:value="${maxPrice}">
                 </div>
 
-                <div class="col-md-3 d-flex align-items-end gap-2">
+                <div class="col-md-3">
+                    <label class="form-label">Laisvas laikas dieną</label>
+                    <input type="date" name="date" class="form-control"
+                           th:value="${date}" th:min="${minDate}" th:max="${maxDate}">
+                </div>
+
+                <div class="col-md-2 d-flex align-items-end gap-2">
                     <button class="btn btn-primary" type="submit">
                         Ieškoti
                     </button>
@@ -62,6 +68,10 @@
     </div>
 
     <h4 class="mb-3">Korepetitoriai</h4>
+
+    <div th:if="${dateError}" class="alert alert-warning" th:text="${dateError}"></div>
+    <p th:if="${date != null and dateError == null}" class="text-muted"
+       th:text="|Rodomi korepetitoriai, turintys laisvo laiko ${@fmt.dateWithDay(date)}.|"></p>
 
     <div th:if="${#lists.isEmpty(tutors)}"
          class="alert alert-info">
@@ -90,7 +100,7 @@
 
                     <p>
                         <strong>Kaina:</strong>
-                        <span th:text="${tutor.hourlyRate}"></span> €/val.
+                        <span th:text="|${@fmt.money(tutor.hourlyRate)}/val.|"></span>
                     </p>
 
                     <a th:href="@{/tutors/{id}(id=${tutor.id})}"

@@ -24,6 +24,10 @@
                 Neteisingi prisijungimo duomenys arba paskyra neaktyvi.
             </div>
 
+            <div th:if="${param.blocked}" class="alert alert-warning">
+                Jūsų sesija nutraukta, nes paskyra užblokuota. Susisiekite su administratoriumi.
+            </div>
+
             <div th:if="${param.logout}" class="alert alert-success">
                 Sėkmingai atsijungėte.
             </div>

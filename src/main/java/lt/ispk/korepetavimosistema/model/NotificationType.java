@@ -10,7 +10,8 @@ public enum NotificationType {
     LESSON_REMINDER("Priminimas"),
     NEW_MESSAGE("Nauja žinutė"),
     PAYMENT("Mokėjimas"),
-    PAYOUT("Išmoka");
+    PAYOUT("Išmoka"),
+    GUARDIAN_LINK("Globos susiejimas");
 
     private final String label;
 
