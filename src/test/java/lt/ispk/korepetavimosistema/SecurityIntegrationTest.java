@@ -81,7 +81,7 @@ class SecurityIntegrationTest extends IntegrationTestBase {
     void anonymousIsRedirectedToLogin() throws Exception {
         mvc.perform(get("/lessons"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrlPattern("**/login"));
+                .andExpect(redirectedUrl("/login"));
     }
 
     @Test
