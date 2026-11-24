@@ -340,6 +340,32 @@ public class LessonService {
 
     // ======================= Pranešimai =======================
 
+    /** Priminimų valandos iki pamokos pradžios. */
+    public static final int REMINDER_HOURS_BEFORE = 24;
+
+    /**
+     * Išsiunčia priminimus apie pamokas, prasidedančias per artimiausias 24 val.
+     * Kiekvienai pamokai priminimas siunčiamas tik kartą (US-M04, US-T04, FR-29).
+     *
+     * @return išsiųstų priminimų (pamokų) skaičius
+     */
+    @Transactional
+    public int sendReminders() {
+        LocalDateTime now = LocalDateTime.now();
+        List<Lesson> lessons = lessonRepository.findLessonsNeedingReminder(
+                LessonStatus.SCHEDULED, now, now.plusHours(REMINDER_HOURS_BEFORE));
+
+        for (Lesson lesson : lessons) {
+            String text = "Priminimas: " + lesson.getSubject() + " pamoka "
+                    + LtFormat.dateTime(lesson.getStartTime()) + " (korepetitorius "
+                    + fullName(lesson.getTutor()) + ", mokinys " + fullName(lesson.getStudent()) + ").";
+            notifyParticipants(lesson, null, NotificationType.LESSON_REMINDER, text);
+            lesson.setReminderSent(true);
+            lessonRepository.save(lesson);
+        }
+        return lessons.size();
+    }
+
     private void notifyParticipants(Lesson lesson, User actor, NotificationType type, String text) {
         Set<User> recipients = new LinkedHashSet<>();
         recipients.add(lesson.getTutor());
@@ -352,7 +378,8 @@ public class LessonService {
 
         Set<Long> notified = new LinkedHashSet<>();
         for (User recipient : recipients) {
-            if (recipient.getId().equals(actor.getId()) || !notified.add(recipient.getId())) {
+            boolean isActor = actor != null && recipient.getId().equals(actor.getId());
+            if (isActor || !notified.add(recipient.getId())) {
                 continue;
             }
             notificationService.notify(recipient, type, text, "/lessons");

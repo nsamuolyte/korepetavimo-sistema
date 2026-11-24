@@ -30,6 +30,18 @@
                    class="link-light text-decoration-none"
                    th:href="@{/payments}">Mokėjimai</a>
 
+                <a class="link-light text-decoration-none" th:href="@{/messages}">
+                    Žinutės
+                    <span th:if="${navUnreadMessages > 0}" class="badge rounded-pill bg-danger"
+                          th:text="${navUnreadMessages}">1</span>
+                </a>
+
+                <a class="link-light text-decoration-none" th:href="@{/notifications}">
+                    Pranešimai
+                    <span th:if="${navUnreadNotifications > 0}" class="badge rounded-pill bg-danger"
+                          th:text="${navUnreadNotifications}">1</span>
+                </a>
+
                 <a class="link-light text-decoration-none" th:href="@{/dashboard}">Paskyra</a>
 
                 <span class="text-white-50 small"

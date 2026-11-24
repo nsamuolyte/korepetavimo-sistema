@@ -56,6 +56,9 @@ public class Lesson {
     @Column(length = 500)
     private String cancellationReason;
 
+    /** Ar jau išsiųstas priminimas prieš pamoką (null = ne). */
+    private Boolean reminderSent;
+
     public Lesson() {
     }
 
@@ -149,5 +152,13 @@ public class Lesson {
 
     public void setCancellationReason(String cancellationReason) {
         this.cancellationReason = cancellationReason;
+    }
+
+    public boolean isReminderSent() {
+        return Boolean.TRUE.equals(reminderSent);
+    }
+
+    public void setReminderSent(boolean reminderSent) {
+        this.reminderSent = reminderSent;
     }
 }

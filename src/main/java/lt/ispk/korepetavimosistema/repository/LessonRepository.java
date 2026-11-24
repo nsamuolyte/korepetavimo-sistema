@@ -82,6 +82,20 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
             @Param("completed") LessonStatus completed
     );
 
+    /** Suplanuotos pamokos intervale, kurioms dar neišsiųstas priminimas. */
+    @Query("""
+        SELECT l FROM Lesson l
+        WHERE l.status = :scheduled
+          AND l.startTime > :from
+          AND l.startTime <= :to
+          AND (l.reminderSent IS NULL OR l.reminderSent = false)
+        """)
+    List<Lesson> findLessonsNeedingReminder(
+            @Param("scheduled") LessonStatus scheduled,
+            @Param("from") LocalDateTime from,
+            @Param("to") LocalDateTime to
+    );
+
     /** Ar du naudotojai susiję per bent vieną pamoką (naudojama žinučių teisėms). */
     @Query("""
         SELECT CASE WHEN COUNT(l) > 0 THEN true ELSE false END FROM Lesson l

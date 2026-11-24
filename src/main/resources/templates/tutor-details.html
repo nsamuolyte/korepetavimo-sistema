@@ -82,6 +82,12 @@
                     Rezervuoti pamoką
                 </a>
 
+                <a th:if="${canBook}"
+                   th:href="@{/messages/{id}(id=${tutor.user.id})}"
+                   class="btn btn-outline-primary btn-lg ms-2">
+                    Parašyti žinutę
+                </a>
+
                 <div th:if="${!loggedIn}" class="alert alert-secondary mb-0">
                     Norėdami rezervuoti pamoką,
                     <a th:href="@{/login}">prisijunkite</a> arba
