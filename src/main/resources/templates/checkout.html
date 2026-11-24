@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="lt" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Paketo apmokėjimas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container py-5" style="max-width: 700px;">
+
+    <a th:if="${profile != null}" th:href="@{/tutors/{id}(id=${profile.id})}"
+       class="text-decoration-none">← Grįžti į korepetitoriaus profilį</a>
+
+    <h1 class="mt-4">Paketo apmokėjimas</h1>
+
+    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+    <form th:action="@{/payments/checkout/{id}(id=${pkg.id})}" method="post">
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h4 th:text="${pkg.name}">5 pamokų paketas</h4>
+                <p class="mb-1"><strong>Korepetitorius:</strong>
+                    <span th:text="|${pkg.tutor.firstName} ${pkg.tutor.lastName}|"></span></p>
+                <p class="mb-1" th:if="${profile != null}"><strong>Dalykas:</strong>
+                    <span th:text="${profile.subject}"></span></p>
+                <p class="mb-3"><strong>Pamokų skaičius:</strong>
+                    <span th:text="${pkg.lessonCount}"></span></p>
+
+                <div class="d-flex justify-content-between align-items-center border-top pt-3">
+                    <span class="fs-5">Galutinė mokėtina suma:</span>
+                    <span class="fs-3 fw-bold" th:text="${@fmt.money(pkg.price)}">95,00 €</span>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${isGuardian}" class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h5>Kuriam vaikui perkate paketą?</h5>
+                <div th:if="${#lists.isEmpty(children)}" class="alert alert-warning mb-0">
+                    Neturite patvirtintų susietų vaikų.
+                    <a th:href="@{/guardian/students}">Susieti vaiko paskyrą</a>.
+                </div>
+                <select th:unless="${#lists.isEmpty(children)}" name="studentId"
+                        class="form-select" required>
+                    <option th:each="c : ${children}" th:value="${c.id}"
+                            th:text="|${c.firstName} ${c.lastName}|">Vaikas</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h5>Apmokėjimo ir atšaukimo sąlygos</h5>
+                <ul class="small mb-3">
+                    <li>Paketą galima naudoti tik pamokoms pas šį korepetitorių.</li>
+                    <li>Rezervuojant pamoką, ji automatiškai nurašoma iš aktyvaus paketo.</li>
+                    <li>Pamoką galima atšaukti ne vėliau kaip prieš 24 val. – tada ji grąžinama į paketą.</li>
+                    <li>Paketas aktyvuojamas tik gavus mokėjimų sistemos patvirtinimą.</li>
+                    <li>Mokėjimo kortelės duomenys mūsų sistemoje nesaugomi.</li>
+                </ul>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="acceptTerms"
+                           value="true" id="acceptTerms" required>
+                    <label class="form-check-label" for="acceptTerms">
+                        Susipažinau ir sutinku su sąlygomis
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg"
+                th:disabled="${isGuardian and #lists.isEmpty(children)}">
+            Pereiti prie apmokėjimo
+        </button>
+    </form>
+
+</div>
+
+</body>
+</html>

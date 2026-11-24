@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="lt" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pamokos perkėlimas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+
+<div class="container py-5" style="max-width: 900px;">
+
+    <a th:href="@{/lessons}" class="text-decoration-none">← Grįžti į tvarkaraštį</a>
+
+    <h1 class="mt-4">Pamokos perkėlimas</h1>
+
+    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <p class="mb-1"><strong>Dalykas:</strong> <span th:text="${lesson.subject}"></span></p>
+            <p class="mb-1"><strong>Korepetitorius:</strong>
+                <span th:text="|${lesson.tutor.firstName} ${lesson.tutor.lastName}|"></span></p>
+            <p class="mb-1"><strong>Mokinys:</strong>
+                <span th:text="|${lesson.student.firstName} ${lesson.student.lastName}|"></span></p>
+            <p class="mb-0"><strong>Dabartinis laikas:</strong>
+                <span th:text="${@fmt.dateTime(lesson.startTime)}"></span>–<span
+                        th:text="${@fmt.time(lesson.endTime)}"></span>
+                (<span th:text="${minutes}"></span> min.)</p>
+        </div>
+    </div>
+
+    <form th:action="@{/lessons/{id}/reschedule(id=${lesson.id})}" method="post"
+          onsubmit="return confirm('Ar tikrai norite perkelti pamoką į pasirinktą laiką?');">
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h5>Pasirinkite naują laiką</h5>
+
+                <div th:if="${#maps.isEmpty(slots)}" class="alert alert-info mb-0">
+                    Laisvų laikų artimiausiu metu nėra.
+                </div>
+
+                <div th:each="entry, es : ${slots}" class="mb-3">
+                    <div class="fw-semibold mb-2" th:text="${@fmt.dateWithDay(entry.key)}"></div>
+                    <div class="d-flex flex-wrap gap-2">
+                        <th:block th:each="s, ss : ${entry.value}">
+                            <input type="radio" class="btn-check" name="start" required
+                                   th:id="|slot-${es.index}-${ss.index}|"
+                                   th:value="${s}">
+                            <label class="btn btn-outline-primary"
+                                   th:for="|slot-${es.index}-${ss.index}|"
+                                   th:text="${@fmt.time(s)}">15:00</label>
+                        </th:block>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg"
+                th:disabled="${#maps.isEmpty(slots)}">Perkelti pamoką</button>
+    </form>
+
+</div>
+
+</body>
+</html>

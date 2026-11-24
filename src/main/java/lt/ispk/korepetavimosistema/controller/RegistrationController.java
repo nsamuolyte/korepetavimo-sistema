@@ -1,14 +1,16 @@
-
 package lt.ispk.korepetavimosistema.controller;
 
+import jakarta.validation.Valid;
+import lt.ispk.korepetavimosistema.dto.RegistrationForm;
 import lt.ispk.korepetavimosistema.model.User;
 import lt.ispk.korepetavimosistema.model.UserRole;
 import lt.ispk.korepetavimosistema.repository.UserRepository;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Locale;
 
@@ -25,48 +27,47 @@ public class RegistrationController {
     }
 
     @GetMapping("/register")
-    public String registrationPage() {
+    public String registrationPage(Model model) {
+        model.addAttribute("form", new RegistrationForm());
         return "register";
     }
 
     @PostMapping("/register")
     public String register(
-            @RequestParam String firstName,
-            @RequestParam String lastName,
-            @RequestParam String email,
-            @RequestParam String password,
-            @RequestParam UserRole role,
+            @Valid @ModelAttribute("form") RegistrationForm form,
+            BindingResult bindingResult,
             Model model) {
 
-        String normalizedEmail = email.trim().toLowerCase(Locale.ROOT);
-
-        if (firstName.isBlank() || lastName.isBlank()
-                || normalizedEmail.isBlank()
-                || !normalizedEmail.contains("@")
-                || password.length() < 8) {
+        // Formos lygio taisyklės (Bean Validation).
+        if (bindingResult.hasErrors()) {
             model.addAttribute("error",
-                    "Patikrinkite įvestus duomenis. Slaptažodis turi būti bent 8 simbolių.");
+                    bindingResult.getAllErrors().getFirst().getDefaultMessage());
+            form.setPassword(null);
             return "register";
         }
 
-        if (role == UserRole.ADMIN) {
+        String normalizedEmail = form.getEmail().trim().toLowerCase(Locale.ROOT);
+
+        if (form.getRole() == UserRole.ADMIN) {
             model.addAttribute("error",
                     "Administratoriaus paskyros registruoti negalima.");
+            form.setPassword(null);
             return "register";
         }
 
         if (userRepository.existsByEmail(normalizedEmail)) {
             model.addAttribute("error",
                     "Šis el. pašto adresas jau naudojamas.");
+            form.setPassword(null);
             return "register";
         }
 
         User user = new User();
-        user.setFirstName(firstName.trim());
-        user.setLastName(lastName.trim());
+        user.setFirstName(form.getFirstName().trim());
+        user.setLastName(form.getLastName().trim());
         user.setEmail(normalizedEmail);
-        user.setPasswordHash(passwordEncoder.encode(password));
-        user.setRole(role);
+        user.setPasswordHash(passwordEncoder.encode(form.getPassword()));
+        user.setRole(form.getRole());
         user.setActive(true);
 
         userRepository.save(user);
