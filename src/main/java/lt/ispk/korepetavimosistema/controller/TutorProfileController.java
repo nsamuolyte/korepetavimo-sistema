@@ -1,4 +1,3 @@
-
 package lt.ispk.korepetavimosistema.controller;
 
 import lt.ispk.korepetavimosistema.model.TutorProfile;
@@ -11,6 +10,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.Set;
+import java.util.LinkedHashSet;
+import java.util.List;
 
 @Controller
 @RequestMapping("/tutor")
@@ -41,7 +43,7 @@ public class TutorProfileController {
     @PostMapping("/profile")
     public String saveProfile(
             Authentication authentication,
-            @RequestParam String subject,
+            @RequestParam(required = false) List<String> subjects,
             @RequestParam String educationLevel,
             @RequestParam BigDecimal hourlyRate,
             @RequestParam String description,
@@ -51,7 +53,18 @@ public class TutorProfileController {
         var user = userRepository.findByEmail(authentication.getName())
                 .orElseThrow();
 
-        String error = validateProfile(subject, educationLevel, hourlyRate,
+        Set<String> selectedSubjects = new LinkedHashSet<>();
+
+        if (subjects != null) {
+            for (String subject : subjects) {
+                if (subject != null && !subject.isBlank()) {
+                    selectedSubjects.add(subject.trim());
+                }
+            }
+        }
+
+        String error = validateProfile(selectedSubjects,
+                educationLevel, hourlyRate,
                 description, experienceYears);
 
         if (error != null) {
@@ -68,7 +81,7 @@ public class TutorProfileController {
                 .orElseGet(TutorProfile::new);
 
         profile.setUser(user);
-        profile.setSubject(subject.trim());
+        profile.setSubjects(selectedSubjects);
         profile.setEducationLevel(educationLevel.trim());
         profile.setHourlyRate(hourlyRate);
         profile.setDescription(description.trim());
@@ -83,30 +96,48 @@ public class TutorProfileController {
         return "redirect:/tutor/profile?saved";
     }
 
-    /** Profilio duomenų patikra (išsamesnė validacija – likutis iš 1 sprinto). */
-    private static String validateProfile(String subject, String educationLevel,
-                                          BigDecimal hourlyRate, String description,
-                                          int experienceYears) {
-        if (subject == null || subject.isBlank() || subject.trim().length() > 100) {
-            return "Mokomas dalykas privalomas (iki 100 simbolių).";
+    /** Profilio duomenų patikra. */
+    private static String validateProfile(
+            Set<String> subjects,
+            String educationLevel,
+            BigDecimal hourlyRate,
+            String description,
+            int experienceYears) {
+
+        if (subjects == null || subjects.isEmpty()) {
+            return "Pasirinkite bent vieną mokomą dalyką.";
         }
-        if (educationLevel == null || educationLevel.isBlank() || educationLevel.trim().length() > 100) {
+
+        for (String subject : subjects) {
+            if (subject.length() > 100) {
+                return "Dalyko pavadinimas negali viršyti 100 simbolių.";
+            }
+        }
+
+        if (educationLevel == null
+                || educationLevel.isBlank()
+                || educationLevel.trim().length() > 100) {
             return "Mokymo lygis privalomas (iki 100 simbolių).";
         }
+
         if (hourlyRate == null
                 || hourlyRate.compareTo(BigDecimal.ONE) < 0
                 || hourlyRate.compareTo(new BigDecimal("500")) > 0) {
             return "Valandinė kaina turi būti nuo 1,00 iki 500,00 €.";
         }
+
         if (hourlyRate.scale() > 2) {
             return "Kaina gali turėti ne daugiau kaip du skaitmenis po kablelio.";
         }
+
         if (experienceYears < 0 || experienceYears > 60) {
             return "Patirtis turi būti nuo 0 iki 60 metų.";
         }
+
         if (description != null && description.length() > 2000) {
             return "Aprašymas negali būti ilgesnis nei 2000 simbolių.";
         }
+
         return null;
     }
 }

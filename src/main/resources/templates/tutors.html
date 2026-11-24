@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="lt" xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -11,7 +10,6 @@
 <body class="bg-light">
 
 <div th:replace="~{fragments/navbar :: navbar}"></div>
-
 
 <div class="container py-5">
 
@@ -28,9 +26,9 @@
         <div class="card-body">
 
             <form th:action="@{/tutors}" method="get"
-                  class="row g-3">
+                  class="row g-3 align-items-end">
 
-                <div class="col-md-4">
+                <div class="col-12 col-md-4 col-xl-3">
                     <label class="form-label">Mokomas dalykas</label>
                     <input type="text" name="subject"
                            class="form-control"
@@ -38,7 +36,7 @@
                            th:value="${subject}">
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-12 col-md-4 col-xl-3">
                     <label class="form-label">Maksimali kaina (€)</label>
                     <input type="number" name="maxPrice"
                            min="0" step="0.01"
@@ -46,21 +44,28 @@
                            th:value="${maxPrice}">
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-12 col-md-4 col-xl-3">
                     <label class="form-label">Laisvas laikas dieną</label>
-                    <input type="date" name="date" class="form-control"
-                           th:value="${date}" th:min="${minDate}" th:max="${maxDate}">
+                    <input type="date" name="date"
+                           class="form-control"
+                           th:value="${date}"
+                           th:min="${minDate}"
+                           th:max="${maxDate}">
                 </div>
 
-                <div class="col-md-2 d-flex align-items-end gap-2">
-                    <button class="btn btn-primary" type="submit">
-                        Ieškoti
-                    </button>
+                <div class="col-12 col-xl-3">
+                    <div class="d-flex justify-content-end gap-2 flex-wrap">
 
-                    <a th:href="@{/tutors}"
-                       class="btn btn-outline-secondary">
-                        Išvalyti
-                    </a>
+                        <button class="btn btn-primary flex-fill" type="submit">
+                            Ieškoti
+                        </button>
+
+                        <a th:href="@{/tutors}"
+                           class="btn btn-outline-secondary flex-fill">
+                            Išvalyti
+                        </a>
+
+                    </div>
                 </div>
 
             </form>
@@ -69,9 +74,12 @@
 
     <h4 class="mb-3">Korepetitoriai</h4>
 
-    <div th:if="${dateError}" class="alert alert-warning" th:text="${dateError}"></div>
+    <div th:if="${dateError}" class="alert alert-warning"
+         th:text="${dateError}"></div>
+
     <p th:if="${date != null and dateError == null}" class="text-muted"
-       th:text="|Rodomi korepetitoriai, turintys laisvo laiko ${@fmt.dateWithDay(date)}.|"></p>
+       th:text="|Rodomi korepetitoriai, turintys laisvo laiko ${@fmt.dateWithDay(date)}.|">
+    </p>
 
     <div th:if="${#lists.isEmpty(tutors)}"
          class="alert alert-info">
@@ -90,7 +98,7 @@
 
                     <p>
                         <strong>Dalykas:</strong>
-                        <span th:text="${tutor.subject}"></span>
+                        <span th:text="${tutor.subjectsDisplay}"></span>
                     </p>
 
                     <p>

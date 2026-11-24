@@ -11,7 +11,6 @@
 
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 
-
 <div class="container py-5" style="max-width: 800px;">
 
     <a th:href="@{/lessons}" class="text-decoration-none">← Grįžti į tvarkaraštį</a>
@@ -25,9 +24,16 @@
         Kol kas neturite mokinių. Mokinys atsiras sąraše, kai užsirezervuos bent vieną pamoką pas jus.
     </div>
 
+    <div th:if="${#sets.isEmpty(subjects)}" class="alert alert-warning">
+        Mokomi dalykai nenustatyti.
+        <a th:href="@{/tutor/profile}">Papildyti profilį</a>.
+    </div>
+
     <div class="card shadow-sm mb-4" th:unless="${#lists.isEmpty(students)}">
         <div class="card-body">
+
             <form th:action="@{/tutor/lessons/new}" method="post" class="row g-3">
+
                 <div class="col-md-6">
                     <label class="form-label">Mokinys</label>
                     <select name="studentId" class="form-select" required>
@@ -36,36 +42,69 @@
                                 th:text="|${s.firstName} ${s.lastName}|">Mokinys</option>
                     </select>
                 </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Mokomas dalykas</label>
+
+                    <select name="subject" class="form-select" required>
+
+                        <option value=""
+                                th:if="${#sets.size(subjects) != 1}">
+                            Pasirinkite dalyką
+                        </option>
+
+                        <option th:each="subject : ${subjects}"
+                                th:value="${subject}"
+                                th:text="${subject}">
+                            Matematika
+                        </option>
+
+                    </select>
+                </div>
+
                 <div class="col-md-6">
                     <label class="form-label">Trukmė</label>
                     <select name="minutes" class="form-select">
-                        <option th:each="d : ${durations}" th:value="${d}"
+                        <option th:each="d : ${durations}"
+                                th:value="${d}"
                                 th:text="|${d} min.|">60 min.</option>
                     </select>
                 </div>
+
                 <div class="col-md-6">
                     <label class="form-label">Data</label>
                     <input type="date" name="date" class="form-control" required
                            th:min="${minDate}" th:max="${maxDate}">
                 </div>
+
                 <div class="col-md-6">
                     <label class="form-label">Pradžios laikas</label>
-                    <input type="time" name="time" class="form-control" step="1800" required>
+                    <input type="time" name="time" class="form-control"
+                           step="1800" required>
                 </div>
+
                 <div class="col-12">
-                    <button type="submit" class="btn btn-primary">Sukurti pamoką</button>
+                    <button type="submit" class="btn btn-primary"
+                            th:disabled="${#sets.isEmpty(subjects)}">
+                        Sukurti pamoką
+                    </button>
                 </div>
+
             </form>
         </div>
     </div>
 
     <h5>Jūsų darbo laikas</h5>
+
     <div th:if="${#lists.isEmpty(availabilities)}" class="alert alert-warning">
-        Darbo laikas nenustatytas. <a th:href="@{/tutor/availability}">Nustatyti darbo laiką</a>.
+        Darbo laikas nenustatytas.
+        <a th:href="@{/tutor/availability}">Nustatyti darbo laiką</a>.
     </div>
+
     <ul class="list-group" th:unless="${#lists.isEmpty(availabilities)}">
         <li class="list-group-item" th:each="a : ${availabilities}"
-            th:text="|${@fmt.day(a.dayOfWeek)}: ${@fmt.time(a.startTime)}–${@fmt.time(a.endTime)}|"></li>
+            th:text="|${@fmt.day(a.dayOfWeek)}: ${@fmt.time(a.startTime)}–${@fmt.time(a.endTime)}|">
+        </li>
     </ul>
 
 </div>

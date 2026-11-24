@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="lt" xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -30,9 +31,29 @@
                 Patvirtintas korepetitorius
             </span>
 
+            <!-- Korepetitoriaus vidutinis įvertinimas -->
+            <div class="mb-3"
+                 th:with="average=${@reviewService.getAverageRating(tutor.user.id)},
+                          count=${@reviewService.getReviewCount(tutor.user.id)}">
+
+                <strong>Vidutinis įvertinimas:</strong>
+
+                <span th:if="${average != null}">
+                    <span class="text-warning">★</span>
+                    <strong th:text="${#numbers.formatDecimal(average, 1, 1)}"></strong>
+                    / 10
+                    (<span th:text="${count}"></span> įvert.)
+                </span>
+
+                <span th:if="${average == null}" class="text-muted">
+                    Įvertinimų dar nėra
+                </span>
+
+            </div>
+
             <p>
                 <strong>Mokomas dalykas:</strong>
-                <span th:text="${tutor.subject}"></span>
+                <span th:text="${tutor.subjectsDisplay}"></span>
             </p>
 
             <p>
@@ -57,6 +78,46 @@
             <p th:text="${tutor.description}">
                 Korepetitoriaus aprašymas
             </p>
+
+            <hr>
+
+            <div class="mt-4"
+                 th:with="reviews=${@reviewService.getReviews(tutor.user.id)}">
+
+                <h5>Mokinių ir globėjų atsiliepimai</h5>
+
+                <p th:if="${#lists.isEmpty(reviews)}" class="text-muted">
+                    Atsiliepimų dar nėra.
+                </p>
+
+                <div th:each="review : ${reviews}"
+                     class="border rounded p-3 mb-3 bg-light">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <strong th:text="${review.author.firstName}">
+                            Autorius
+                        </strong>
+
+                        <span>
+                <span class="text-warning">★</span>
+                <strong th:text="${review.rating}"></strong> / 10
+            </span>
+
+                    </div>
+
+                    <p th:if="${review.comment != null and !#strings.isEmpty(review.comment)}"
+                       th:text="${review.comment}"
+                       class="mt-2 mb-2">
+                    </p>
+
+                    <small class="text-muted"
+                           th:text="${#temporals.format(review.createdAt, 'yyyy-MM-dd')}">
+                    </small>
+
+                </div>
+
+            </div>
 
             <div th:unless="${#lists.isEmpty(packages)}" class="mt-4">
                 <h5>Pamokų paketai</h5>

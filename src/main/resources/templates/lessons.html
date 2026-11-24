@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="lt" xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -10,7 +11,6 @@
 <body class="bg-light">
 
 <div th:replace="~{fragments/navbar :: navbar}"></div>
-
 
 <div class="container py-5">
 
@@ -123,7 +123,7 @@
                 <th>Mokinys</th>
                 <th>Kaina</th>
                 <th>Būsena</th>
-                <th></th>
+                <th>Veiksmai</th>
             </tr>
             </thead>
             <tbody>
@@ -149,6 +149,42 @@
                     <form th:if="${me.id == l.tutor.id and l.status.name() == 'SCHEDULED'}"
                           th:action="@{/lessons/{id}/complete(id=${l.id})}" method="post">
                         <button type="submit" class="btn btn-sm btn-success">Pažymėti įvykusia</button>
+                    </form>
+
+                    <!-- ===== Korepetitoriaus įvertinimas ===== -->
+                    <form th:if="${@reviewService.canReview(l, me)}"
+                          th:action="@{/reviews/add}"
+                          method="post"
+                          class="d-flex flex-column gap-2">
+
+                        <input type="hidden" name="lessonId"
+                               th:value="${l.id}">
+
+                        <label class="form-label mb-0">
+                            Įvertinimas (1–10)
+                        </label>
+
+                        <select name="rating"
+                                class="form-select form-select-sm"
+                                required>
+                            <option value="">Pasirinkite balą</option>
+                            <option th:each="n : ${#numbers.sequence(1,10)}"
+                                    th:value="${n}"
+                                    th:text="${n}">
+                            </option>
+                        </select>
+
+                        <textarea name="comment"
+                                  class="form-control form-control-sm"
+                                  maxlength="1000"
+                                  rows="2"
+                                  placeholder="Komentaras (nebūtina)"></textarea>
+
+                        <button type="submit"
+                                class="btn btn-sm btn-primary">
+                            Pateikti įvertinimą
+                        </button>
+
                     </form>
                 </td>
             </tr>

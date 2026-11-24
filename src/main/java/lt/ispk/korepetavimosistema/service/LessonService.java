@@ -64,6 +64,12 @@ public class LessonService {
     @Transactional
     public Lesson book(User actor, Long tutorUserId, Long studentId,
                        LocalDateTime start, int minutes) {
+        return book(actor, tutorUserId, studentId, start, minutes, null);
+    }
+
+    @Transactional
+    public Lesson book(User actor, Long tutorUserId, Long studentId,
+                       LocalDateTime start, int minutes, String subject) {
 
         if (!AvailabilityService.DURATIONS.contains(minutes)) {
             throw new BookingException("Netinkama pamokos trukmė.");
@@ -84,6 +90,23 @@ public class LessonService {
                 .filter(p -> p.isApproved() && !p.isRejected())
                 .orElseThrow(() -> new BookingException("Korepetitoriaus profilis dar nepatvirtintas."));
 
+        Set<String> subjects = profile.getSubjects();
+
+        String selectedSubject = subject;
+
+        if (selectedSubject == null || selectedSubject.isBlank()) {
+            if (subjects.size() != 1) {
+                throw new BookingException("Pasirinkite mokomą dalyką.");
+            }
+
+            selectedSubject = subjects.iterator().next();
+        }
+
+        if (!subjects.contains(selectedSubject)) {
+            throw new BookingException(
+                    "Korepetitorius pasirinkto dalyko nemoko.");
+        }
+
         User student = resolveStudent(actor, tutor, studentId);
         LocalDateTime end = start.plusMinutes(minutes);
 
@@ -93,7 +116,7 @@ public class LessonService {
         lesson.setTutor(tutor);
         lesson.setStudent(student);
         lesson.setBookedBy(actor);
-        lesson.setSubject(profile.getSubject());
+        lesson.setSubject(selectedSubject);
         lesson.setStartTime(start);
         lesson.setEndTime(end);
         lesson.setStatus(LessonStatus.SCHEDULED);

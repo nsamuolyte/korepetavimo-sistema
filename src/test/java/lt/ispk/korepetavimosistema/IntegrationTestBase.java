@@ -19,6 +19,7 @@ import java.time.LocalTime;
 @SpringBootTest
 public abstract class IntegrationTestBase {
 
+    @Autowired protected ReviewRepository reviewRepository;
     @Autowired protected UserRepository userRepository;
     @Autowired protected TutorProfileRepository tutorProfileRepository;
     @Autowired protected GuardianStudentRepository guardianStudentRepository;
@@ -38,6 +39,7 @@ public abstract class IntegrationTestBase {
         messageRepository.deleteAll();
         payoutRepository.deleteAll();
         paymentRepository.deleteAll();
+        reviewRepository.deleteAll();
         lessonRepository.deleteAll();
         packagePurchaseRepository.deleteAll();
         lessonPackageRepository.deleteAll();
