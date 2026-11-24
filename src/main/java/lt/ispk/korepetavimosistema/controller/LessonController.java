@@ -111,13 +111,14 @@ public class LessonController {
                        @RequestParam(required = false) String start,
                        @RequestParam int minutes,
                        @RequestParam(required = false) Long studentId,
+                       @RequestParam(required = false) String subject,
                        RedirectAttributes redirect) {
         User user = currentUserService.get(authentication);
         TutorProfile profile = publicProfile(profileId);
 
         try {
             Lesson lesson = lessonService.book(user, profile.getUser().getId(), studentId,
-                    parse(start), minutes);
+                    parse(start), minutes, subject);
             redirect.addFlashAttribute("success", "Pamoka rezervuota: "
                     + LtFormat.dateTime(lesson.getStartTime()) + ", "
                     + lesson.getSubject() + ".");

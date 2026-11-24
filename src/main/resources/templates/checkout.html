@@ -28,7 +28,7 @@
                 <p class="mb-1"><strong>Korepetitorius:</strong>
                     <span th:text="|${pkg.tutor.firstName} ${pkg.tutor.lastName}|"></span></p>
                 <p class="mb-1" th:if="${profile != null}"><strong>Dalykas:</strong>
-                    <span th:text="${profile.subject}"></span></p>
+                    <span th:text="${profile.subjectsDisplay}"></span></p>
                 <p class="mb-3"><strong>Pamokų skaičius:</strong>
                     <span th:text="${pkg.lessonCount}"></span></p>
 
