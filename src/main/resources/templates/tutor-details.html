@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="lt" xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -45,7 +44,7 @@
 
             <p>
                 <strong>Kaina:</strong>
-                <span th:text="${tutor.hourlyRate}"></span> €/val.
+                <span th:text="|${@fmt.money(tutor.hourlyRate)}/val.|"></span>
             </p>
 
             <hr>
@@ -56,9 +55,22 @@
                 Korepetitoriaus aprašymas
             </p>
 
-            <div class="alert alert-secondary mt-4">
-                Pamokų rezervacija bus prieinama
-                įgyvendinus antrąjį sprintą.
+            <div class="mt-4">
+                <a th:if="${canBook}"
+                   th:href="@{/lessons/book/{id}(id=${tutor.id})}"
+                   class="btn btn-primary btn-lg">
+                    Rezervuoti pamoką
+                </a>
+
+                <div th:if="${!loggedIn}" class="alert alert-secondary mb-0">
+                    Norėdami rezervuoti pamoką,
+                    <a th:href="@{/login}">prisijunkite</a> arba
+                    <a th:href="@{/register}">užsiregistruokite</a>.
+                </div>
+
+                <div th:if="${loggedIn and !canBook}" class="alert alert-secondary mb-0">
+                    Pamokas rezervuoti gali mokiniai ir jų tėvai / globėjai.
+                </div>
             </div>
 
         </div>
