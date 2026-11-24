@@ -54,7 +54,6 @@ import static org.springframework.security.config.Customizer.withDefaults;
                     .requestMatchers("/student/**").hasRole("STUDENT")
                     .anyRequest().authenticated()
 
-                    .anyRequest().authenticated()
             );
 
             http.formLogin(form -> form
