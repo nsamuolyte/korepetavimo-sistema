@@ -1,0 +1,668 @@
+/* =====================================================================
+   Korepetavimo sistema – tema
+   Spalvos: paletė Midnight #090F15 · Mountainside #262E36 · Apres Ski #6C6D74
+            · Slopes #B3B7BA · Arctic #D3D1CE
+   Būsenos (prigesintos, šaltesnės, derinamos prie paletės):
+            sėkmė #4E6B5D · klaida #94504E · įspėjimas #A8874F
+   Formos: apvalūs („pill“) mygtukai ir laukai, minkšti šešėliai,
+   pranešimai su apvalia ikonėle. Įkeliama po Bootstrap 5.3.
+   ===================================================================== */
+
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@400;500;600&display=swap");
+
+:root {
+    /* Paletė */
+    --k-midnight: #090F15;
+    --k-mountainside: #262E36;
+    --k-apres-ski: #6C6D74;
+    --k-slopes: #B3B7BA;
+    --k-arctic: #D3D1CE;
+
+    /* Paviršiai: Arctic su baltu (tik šviesumas, be naujų atspalvių) */
+    --k-surface-page: color-mix(in srgb, var(--k-arctic) 45%, #FFFFFF);
+    --k-surface-card: color-mix(in srgb, var(--k-arctic) 14%, #FFFFFF);
+    --k-surface-soft: color-mix(in srgb, var(--k-arctic) 30%, #FFFFFF);
+    --k-line: color-mix(in srgb, var(--k-slopes) 55%, #FFFFFF);
+
+    /* Šešėliai – Midnight su skaidrumu */
+    --k-shadow-soft: 0 1px 2px rgba(9, 15, 21, .05), 0 8px 24px rgba(9, 15, 21, .07);
+    --k-shadow-raised: 0 1px 1px rgba(9, 15, 21, .06), 0 4px 12px rgba(9, 15, 21, .10);
+    --k-shadow-pressed: inset 0 1px 3px rgba(9, 15, 21, .12);
+
+    /* Būsenų spalvos */
+    --k-success: #4E6B5D;
+    --k-success-hover: #405A4E;
+    --k-success-soft: #E3EAE6;
+    --k-success-ink: #2E4339;
+    --k-danger: #94504E;
+    --k-danger-hover: #7C4140;
+    --k-danger-soft: #F1E5E3;
+    --k-danger-ink: #5E2F2E;
+    --k-warning: #A8874F;
+    --k-warning-soft: #F2ECE0;
+    --k-warning-ink: #5C4825;
+
+    --k-radius-card: 1.25rem;
+    --k-radius-pill: 999px;
+
+    /* Bootstrap pagrindas */
+    --bs-body-font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --bs-body-color: var(--k-mountainside);
+    --bs-body-color-rgb: 38, 46, 54;
+    --bs-body-bg: var(--k-surface-page);
+    --bs-emphasis-color: var(--k-midnight);
+    --bs-heading-color: var(--k-midnight);
+    --bs-secondary-color: var(--k-apres-ski);
+    --bs-secondary-color-rgb: 108, 109, 116;
+    --bs-border-color: var(--k-line);
+    --bs-border-radius: .75rem;
+    --bs-border-radius-lg: var(--k-radius-card);
+
+    --bs-link-color: var(--k-mountainside);
+    --bs-link-color-rgb: 38, 46, 54;
+    --bs-link-hover-color: var(--k-midnight);
+    --bs-link-hover-color-rgb: 9, 15, 21;
+
+    /* Visi spalvų vaidmenys susieti tik su palete */
+    --bs-primary: var(--k-mountainside);
+    --bs-primary-rgb: 38, 46, 54;
+    --bs-secondary: var(--k-apres-ski);
+    --bs-secondary-rgb: 108, 109, 116;
+    --bs-success: var(--k-success);
+    --bs-success-rgb: 78, 107, 93;
+    --bs-info: var(--k-apres-ski);
+    --bs-info-rgb: 108, 109, 116;
+    --bs-warning: var(--k-warning);
+    --bs-warning-rgb: 168, 135, 79;
+    --bs-danger: var(--k-danger);
+    --bs-danger-rgb: 148, 80, 78;
+    --bs-dark: var(--k-midnight);
+    --bs-dark-rgb: 9, 15, 21;
+    --bs-light: var(--k-arctic);
+    --bs-light-rgb: 211, 209, 206;
+
+    --bs-focus-ring-color: rgba(38, 46, 54, .22);
+}
+
+/* =================== Tipografija =================== */
+body {
+    -webkit-font-smoothing: antialiased;
+}
+
+/* body class="bg-light" visuose puslapiuose -> šviesus Arctic fonas */
+body.bg-light {
+    background-color: var(--k-surface-page) !important;
+}
+
+h1, h2, h3, h4,
+.display-1, .display-2, .display-3, .display-4, .display-5, .display-6,
+.navbar-brand {
+    font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+    font-weight: 600;
+    letter-spacing: -.01em;
+}
+
+h5, h6 {
+    font-weight: 600;
+    color: var(--k-midnight);
+}
+
+.text-muted,
+.form-text {
+    color: var(--k-apres-ski) !important;
+}
+
+/* =================== Viršutinis meniu =================== */
+.navbar.bg-primary {
+    background-color: var(--k-midnight) !important;
+    box-shadow: none !important;
+}
+
+.navbar-brand {
+    font-size: 1.4rem;
+    font-style: italic;
+    color: var(--k-arctic) !important;
+}
+
+.navbar .link-light {
+    color: var(--k-slopes) !important;
+    font-size: .95rem;
+    padding: .35rem .8rem;
+    border-radius: var(--k-radius-pill);
+    transition: color .15s ease, background-color .15s ease;
+}
+
+.navbar .link-light:hover,
+.navbar .link-light:focus {
+    color: var(--k-arctic) !important;
+    background-color: rgba(211, 209, 206, .08);
+}
+
+.navbar .text-white-50 {
+    color: var(--k-slopes) !important;
+    opacity: .75;
+}
+
+.navbar .badge.bg-danger {
+    background-color: var(--k-arctic) !important;
+    color: var(--k-midnight) !important;
+}
+
+/* =================== Mygtukai =================== */
+.btn {
+    --bs-btn-padding-x: 1.35rem;
+    --bs-btn-padding-y: .6rem;
+    --bs-btn-font-weight: 500;
+    --bs-btn-border-radius: var(--k-radius-pill);
+    --bs-btn-focus-shadow-rgb: 38, 46, 54;
+    letter-spacing: .01em;
+    transition: background-color .15s ease, color .15s ease, box-shadow .15s ease, transform .1s ease;
+}
+
+.btn:active {
+    transform: translateY(1px);
+}
+
+.btn-sm {
+    --bs-btn-padding-x: .95rem;
+    --bs-btn-padding-y: .32rem;
+    --bs-btn-font-size: .85rem;
+    --bs-btn-border-radius: var(--k-radius-pill);
+}
+
+.btn-lg {
+    --bs-btn-padding-x: 2rem;
+    --bs-btn-padding-y: .8rem;
+    --bs-btn-font-size: 1.1rem;
+    --bs-btn-border-radius: var(--k-radius-pill);
+    font-family: "Playfair Display", Georgia, serif;
+}
+
+/* Pagrindinis veiksmas: tamsus, pakeltas */
+.btn-primary,
+.btn-dark {
+    --bs-btn-color: var(--k-arctic);
+    --bs-btn-bg: var(--k-mountainside);
+    --bs-btn-border-color: var(--k-mountainside);
+    --bs-btn-hover-color: #FFFFFF;
+    --bs-btn-hover-bg: var(--k-midnight);
+    --bs-btn-hover-border-color: var(--k-midnight);
+    --bs-btn-active-color: #FFFFFF;
+    --bs-btn-active-bg: var(--k-midnight);
+    --bs-btn-active-border-color: var(--k-midnight);
+    --bs-btn-disabled-color: var(--k-arctic);
+    --bs-btn-disabled-bg: var(--k-slopes);
+    --bs-btn-disabled-border-color: var(--k-slopes);
+    box-shadow: var(--k-shadow-raised);
+}
+
+/* Sėkmingas / patvirtinimo veiksmas */
+.btn-success {
+    --bs-btn-color: #FFFFFF;
+    --bs-btn-bg: var(--k-success);
+    --bs-btn-border-color: var(--k-success);
+    --bs-btn-hover-color: #FFFFFF;
+    --bs-btn-hover-bg: var(--k-success-hover);
+    --bs-btn-hover-border-color: var(--k-success-hover);
+    --bs-btn-active-color: #FFFFFF;
+    --bs-btn-active-bg: var(--k-success-hover);
+    --bs-btn-active-border-color: var(--k-success-hover);
+    box-shadow: var(--k-shadow-raised);
+}
+
+/* Antrinis veiksmas: šviesus, pakeltas (kaip „Back“) */
+.btn-outline-primary,
+.btn-outline-secondary,
+.btn-secondary,
+.btn-light {
+    --bs-btn-color: var(--k-mountainside);
+    --bs-btn-bg: var(--k-surface-card);
+    --bs-btn-border-color: transparent;
+    --bs-btn-hover-color: var(--k-midnight);
+    --bs-btn-hover-bg: #FFFFFF;
+    --bs-btn-hover-border-color: transparent;
+    --bs-btn-active-color: var(--k-midnight);
+    --bs-btn-active-bg: var(--k-arctic);
+    --bs-btn-active-border-color: transparent;
+    --bs-btn-disabled-color: var(--k-slopes);
+    --bs-btn-disabled-bg: var(--k-surface-soft);
+    --bs-btn-disabled-border-color: transparent;
+    box-shadow: var(--k-shadow-raised);
+}
+
+/* Pavojingas veiksmas: prigesinta raudona */
+.btn-outline-danger {
+    --bs-btn-color: var(--k-danger);
+    --bs-btn-bg: transparent;
+    --bs-btn-border-color: color-mix(in srgb, var(--k-danger) 45%, #FFFFFF);
+    --bs-btn-hover-color: #FFFFFF;
+    --bs-btn-hover-bg: var(--k-danger);
+    --bs-btn-hover-border-color: var(--k-danger);
+    --bs-btn-active-color: #FFFFFF;
+    --bs-btn-active-bg: var(--k-danger-hover);
+    --bs-btn-active-border-color: var(--k-danger-hover);
+    box-shadow: none;
+}
+
+.btn-danger {
+    --bs-btn-color: #FFFFFF;
+    --bs-btn-bg: var(--k-danger);
+    --bs-btn-border-color: var(--k-danger);
+    --bs-btn-hover-color: #FFFFFF;
+    --bs-btn-hover-bg: var(--k-danger-hover);
+    --bs-btn-hover-border-color: var(--k-danger-hover);
+    box-shadow: var(--k-shadow-raised);
+}
+
+/* Mygtukai tamsiame fone (meniu) */
+.btn-outline-light {
+    --bs-btn-color: var(--k-arctic);
+    --bs-btn-bg: transparent;
+    --bs-btn-border-color: rgba(211, 209, 206, .35);
+    --bs-btn-hover-color: var(--k-midnight);
+    --bs-btn-hover-bg: var(--k-arctic);
+    --bs-btn-hover-border-color: var(--k-arctic);
+    box-shadow: none;
+}
+
+.navbar .btn-light {
+    --bs-btn-bg: var(--k-arctic);
+    --bs-btn-color: var(--k-midnight);
+    box-shadow: none;
+}
+
+/* Segmentuoti pasirinkimai (btn-check + btn-outline-*) – kaip „Today / Week / Month“ */
+.btn-group {
+    background: var(--k-surface-card);
+    border-radius: var(--k-radius-pill);
+    box-shadow: var(--k-shadow-raised);
+    padding: .25rem;
+    gap: .15rem;
+}
+
+.btn-group > .btn {
+    box-shadow: none;
+    --bs-btn-bg: transparent;
+    border-radius: var(--k-radius-pill) !important;
+}
+
+.btn-check:checked + .btn,
+.btn-check:checked + .btn-outline-primary,
+.btn-check:checked + .btn-outline-secondary {
+    background-color: var(--k-mountainside);
+    border-color: var(--k-mountainside);
+    color: var(--k-arctic);
+    box-shadow: var(--k-shadow-raised);
+}
+
+/* =================== Kortelės ir paviršiai =================== */
+.card {
+    --bs-card-bg: var(--k-surface-card);
+    --bs-card-border-color: transparent;
+    --bs-card-border-radius: var(--k-radius-card);
+    --bs-card-inner-border-radius: calc(var(--k-radius-card) - 1px);
+    --bs-card-cap-bg: transparent;
+    --bs-card-spacer-y: 1.4rem;
+    --bs-card-spacer-x: 1.5rem;
+    box-shadow: var(--k-shadow-soft);
+}
+
+.card-header {
+    border-bottom-color: var(--k-line);
+    font-size: .78rem;
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--k-apres-ski);
+}
+
+.shadow-sm {
+    box-shadow: var(--k-shadow-soft) !important;
+}
+
+.bg-white {
+    background-color: var(--k-surface-card) !important;
+}
+
+.rounded-3 {
+    border-radius: var(--k-radius-card) !important;
+}
+
+/* Pagrindinio puslapio blokas: tamsus, su švelniu Mountainside → Midnight perėjimu */
+.p-5.bg-white.rounded-3 {
+    background: linear-gradient(135deg, var(--k-mountainside) 0%, var(--k-midnight) 100%) !important;
+    color: var(--k-arctic);
+}
+
+.p-5.bg-white.rounded-3 h1,
+.p-5.bg-white.rounded-3 .display-5 {
+    color: #FFFFFF;
+}
+
+.p-5.bg-white.rounded-3 .text-muted {
+    color: var(--k-slopes) !important;
+}
+
+.p-5.bg-white.rounded-3 .btn-primary {
+    --bs-btn-color: var(--k-midnight);
+    --bs-btn-bg: var(--k-arctic);
+    --bs-btn-border-color: var(--k-arctic);
+    --bs-btn-hover-color: var(--k-midnight);
+    --bs-btn-hover-bg: #FFFFFF;
+    --bs-btn-hover-border-color: #FFFFFF;
+}
+
+.p-5.bg-white.rounded-3 .btn-outline-primary {
+    --bs-btn-color: var(--k-arctic);
+    --bs-btn-bg: rgba(211, 209, 206, .08);
+    --bs-btn-border-color: rgba(211, 209, 206, .35);
+    --bs-btn-hover-color: var(--k-midnight);
+    --bs-btn-hover-bg: var(--k-arctic);
+    box-shadow: none;
+}
+
+/* =================== Formos =================== */
+.form-control,
+.form-select {
+    border-radius: var(--k-radius-pill);
+    border: 1px solid transparent;
+    background-color: #FFFFFF;
+    padding: .65rem 1.15rem;
+    box-shadow: var(--k-shadow-raised);
+    color: var(--k-midnight);
+}
+
+.form-select {
+    padding-right: 2.6rem;
+    background-position: right 1.1rem center;
+}
+
+textarea.form-control {
+    border-radius: 1rem;
+}
+
+.form-control::placeholder {
+    color: var(--k-slopes);
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--k-slopes);
+    box-shadow: var(--k-shadow-raised), 0 0 0 .2rem rgba(38, 46, 54, .12);
+}
+
+.form-label {
+    font-size: .78rem;
+    font-weight: 600;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--k-apres-ski);
+    margin-left: .35rem;
+}
+
+.input-group > .form-control,
+.input-group > .btn {
+    box-shadow: none;
+}
+
+.input-group {
+    border-radius: var(--k-radius-pill);
+    box-shadow: var(--k-shadow-raised);
+}
+
+/* Varnelės */
+.form-check-input {
+    border-color: var(--k-slopes);
+    box-shadow: var(--k-shadow-pressed);
+}
+
+.form-check-input[type="checkbox"] {
+    border-radius: .35rem;
+}
+
+.form-check-input:checked {
+    background-color: var(--k-mountainside);
+    border-color: var(--k-mountainside);
+    box-shadow: none;
+}
+
+.form-check-input:focus {
+    border-color: var(--k-apres-ski);
+    box-shadow: 0 0 0 .2rem rgba(38, 46, 54, .12);
+}
+
+/* Jungikliai (form-switch) */
+.form-switch {
+    padding-left: 3.4em;
+}
+
+.form-switch .form-check-input {
+    margin-left: -3.4em;
+    width: 2.6em;
+    height: 1.4em;
+    margin-top: .05em;
+    background-color: var(--k-surface-soft);
+    border-color: transparent;
+    box-shadow: var(--k-shadow-pressed);
+    --bs-form-switch-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23fff'/%3e%3c/svg%3e");
+}
+
+.form-switch .form-check-input:checked {
+    background-color: var(--k-mountainside);
+}
+
+/* Slankiklis */
+.form-range::-webkit-slider-thumb {
+    background: #FFFFFF;
+    box-shadow: var(--k-shadow-raised);
+    width: 1.3rem;
+    height: 1.3rem;
+    margin-top: -.45rem;
+}
+
+.form-range::-webkit-slider-runnable-track {
+    background: var(--k-arctic);
+    height: .4rem;
+}
+
+.form-range::-moz-range-thumb {
+    background: #FFFFFF;
+    box-shadow: var(--k-shadow-raised);
+}
+
+/* Progreso juosta */
+.progress {
+    --bs-progress-bg: var(--k-arctic);
+    --bs-progress-bar-bg: var(--k-mountainside);
+    --bs-progress-height: .55rem;
+    --bs-progress-border-radius: var(--k-radius-pill);
+}
+
+/* =================== Lentelės =================== */
+.table {
+    --bs-table-bg: transparent;
+    --bs-table-striped-bg: rgba(179, 183, 186, .14);
+    --bs-table-hover-bg: rgba(179, 183, 186, .20);
+    --bs-table-border-color: var(--k-line);
+}
+
+.table > thead th {
+    color: var(--k-apres-ski);
+    font-weight: 600;
+    font-size: .75rem;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    border-bottom-color: var(--k-line);
+}
+
+/* =================== Ženkleliai =================== */
+.badge {
+    font-weight: 500;
+    letter-spacing: .03em;
+    padding: .4em .8em;
+    border-radius: var(--k-radius-pill);
+}
+
+.badge.bg-primary,
+.badge.bg-dark {
+    background-color: var(--k-mountainside) !important;
+    color: var(--k-arctic) !important;
+}
+
+.badge.bg-secondary,
+.badge.bg-info {
+    background-color: var(--k-apres-ski) !important;
+    color: #FFFFFF !important;
+}
+
+.badge.bg-light {
+    background-color: var(--k-arctic) !important;
+    color: var(--k-mountainside) !important;
+}
+
+.badge.bg-success {
+    background-color: var(--k-success) !important;
+    color: #FFFFFF !important;
+}
+
+.badge.bg-danger {
+    background-color: var(--k-danger) !important;
+    color: #FFFFFF !important;
+}
+
+.badge.bg-warning {
+    background-color: var(--k-warning) !important;
+    color: #FFFFFF !important;
+}
+
+/* Kitur naudojami bg-* blokai */
+.bg-primary:not(.badge):not(.navbar) {
+    background-color: var(--k-mountainside) !important;
+}
+
+.bg-success:not(.badge) { background-color: var(--k-success) !important; }
+.bg-danger:not(.badge)  { background-color: var(--k-danger) !important; }
+.bg-warning:not(.badge) { background-color: var(--k-warning) !important; }
+
+.text-primary { color: var(--k-mountainside) !important; }
+.text-success { color: var(--k-success) !important; }
+.text-danger  { color: var(--k-danger) !important; }
+.text-warning { color: var(--k-warning) !important; }
+.text-info    { color: var(--k-apres-ski) !important; }
+
+/* =================== Pranešimai (alert) – kaip „All set.“ =================== */
+.alert {
+    --bs-alert-bg: var(--k-surface-card);
+    --bs-alert-color: var(--k-mountainside);
+    --bs-alert-border-color: transparent;
+    --bs-alert-border-radius: var(--k-radius-card);
+    --bs-alert-padding-y: .95rem;
+    --bs-alert-padding-x: 1.2rem;
+    position: relative;
+    padding-left: 3.7rem;
+    min-height: 3.3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-shadow: var(--k-shadow-soft);
+}
+
+.alert::before {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1.9rem;
+    height: 1.9rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .9rem;
+    font-weight: 600;
+    content: "i";
+    background: var(--k-arctic);
+    color: var(--k-mountainside);
+}
+
+.alert-success {
+    --bs-alert-bg: var(--k-success-soft);
+    --bs-alert-color: var(--k-success-ink);
+}
+
+.alert-success::before {
+    content: "✓";
+    background: var(--k-success);
+    color: #FFFFFF;
+}
+
+.alert-danger {
+    --bs-alert-bg: var(--k-danger-soft);
+    --bs-alert-color: var(--k-danger-ink);
+}
+
+.alert-danger::before {
+    content: "!";
+    background: var(--k-danger);
+    color: #FFFFFF;
+}
+
+.alert-warning {
+    --bs-alert-bg: var(--k-warning-soft);
+    --bs-alert-color: var(--k-warning-ink);
+}
+
+.alert-warning::before {
+    content: "!";
+    background: var(--k-warning);
+    color: #FFFFFF;
+}
+
+.alert-info::before,
+.alert-secondary::before,
+.alert-primary::before {
+    content: "i";
+    font-family: Georgia, serif;
+    font-style: italic;
+}
+
+.alert .btn-close {
+    top: 50%;
+    transform: translateY(-50%);
+    padding: .9rem;
+}
+
+.alert-link {
+    color: inherit;
+    text-decoration: underline;
+}
+
+/* =================== Sąrašai, puslapiavimas, kortelių antraštės =================== */
+.list-group {
+    --bs-list-group-bg: var(--k-surface-card);
+    --bs-list-group-border-color: var(--k-line);
+    --bs-list-group-active-bg: var(--k-mountainside);
+    --bs-list-group-active-border-color: var(--k-mountainside);
+    --bs-list-group-active-color: var(--k-arctic);
+    --bs-list-group-border-radius: var(--k-radius-card);
+    box-shadow: var(--k-shadow-soft);
+}
+
+.pagination {
+    --bs-pagination-color: var(--k-mountainside);
+    --bs-pagination-bg: var(--k-surface-card);
+    --bs-pagination-border-color: transparent;
+    --bs-pagination-active-bg: var(--k-mountainside);
+    --bs-pagination-active-border-color: var(--k-mountainside);
+    --bs-pagination-active-color: var(--k-arctic);
+    gap: .3rem;
+}
+
+.pagination .page-link {
+    border-radius: var(--k-radius-pill) !important;
+}
+
+hr {
+    border-color: var(--k-line);
+    opacity: 1;
+}
