@@ -14,6 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 
+import java.util.Locale;
+
 @Configuration
 public class SecurityConfig {
 
@@ -37,7 +39,7 @@ public class SecurityConfig {
     @Bean
     public UserDetailsService userDetailsService(UserRepository repository) {
         return email -> {
-            var user = repository.findByEmail(email.toLowerCase().trim())
+            var user = repository.findByEmail(email.trim().toLowerCase(Locale.ROOT))
                     .orElseThrow(() ->
                             new UsernameNotFoundException("Naudotojas nerastas"));
 

@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Locale;
 
 /**
  * Bendra integracinių testų bazė: H2 duomenų bazė (src/test/resources/application.properties),
@@ -61,7 +62,7 @@ public abstract class IntegrationTestBase {
     protected User user(String email, UserRole role) {
         User u = new User();
         u.setFirstName("Testas");
-        u.setLastName(role.name().charAt(0) + role.name().substring(1).toLowerCase());
+        u.setLastName(role.name().charAt(0) + role.name().substring(1).toLowerCase(Locale.ROOT));
         u.setEmail(email);
         u.setPasswordHash(passwordEncoder.encode("Testas123"));
         u.setRole(role);
