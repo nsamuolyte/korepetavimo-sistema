@@ -11,7 +11,8 @@ public enum NotificationType {
     NEW_MESSAGE("Nauja žinutė"),
     PAYMENT("Mokėjimas"),
     PAYOUT("Išmoka"),
-    GUARDIAN_LINK("Globos susiejimas");
+    GUARDIAN_LINK("Globos susiejimas"),
+    TUTOR_PROFILE("Korepetitoriaus profilis");
 
     private final String label;
 

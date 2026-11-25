@@ -35,7 +35,17 @@
                  th:text="${error}"></div>
 
             <div th:if="${profile.approved}" class="alert alert-success">
-                Profilis patvirtintas.
+                Profilis patvirtintas ir matomas korepetitorių paieškoje.
+            </div>
+
+            <div th:if="${profile.rejected}" class="alert alert-danger">
+                Administratorius atmetė jūsų profilį. Pataisykite informaciją ir išsaugokite
+                profilį – jis bus pateiktas tvirtinti iš naujo.
+            </div>
+
+            <div th:if="${profile.id != null and !profile.approved and !profile.rejected and param.saved == null}"
+                 class="alert alert-warning">
+                Profilis laukia administratoriaus patvirtinimo.
             </div>
 
             <form th:action="@{/tutor/profile}" method="post">
