@@ -48,8 +48,9 @@
                 <td th:text="|${p.remainingLessons} iš ${p.lessonPackage.lessonCount}|">3 iš 5</td>
                 <td th:text="${@fmt.dateTime(p.purchasedAt)}"></td>
                 <td>
-                    <span th:if="${p.active}" class="badge bg-success">Aktyvus</span>
-                    <span th:unless="${p.active}" class="badge bg-secondary">Neaktyvus</span>
+                    <span th:if="${p.active and p.remainingLessons > 0}" class="badge bg-success">Aktyvus</span>
+                    <span th:if="${p.active and p.remainingLessons == 0}" class="badge bg-secondary">Išnaudotas</span>
+                    <span th:unless="${p.active}" class="badge bg-warning">Neapmokėtas</span>
                 </td>
             </tr>
             </tbody>
