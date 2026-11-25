@@ -1,0 +1,63 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    name: Testai ir statinė analizė
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Java 27
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '27'
+          cache: maven
+
+      - name: mvnw verify
+        run: ./mvnw -B -ntp verify
+
+      - name: Įkelti ataskaitas
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: kokybes-ataskaitos
+          path: |
+            target/pmd.xml
+            target/checkstyle-result.xml
+            target/surefire-reports/
+          if-no-files-found: ignore
+
+  migrations:
+    name: Flyway migracijos (PostgreSQL)
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_DB: korepetavimas
+          POSTGRES_USER: ci
+          POSTGRES_PASSWORD: ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U ci"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Vykdyti migracijas
+        env:
+          PGPASSWORD: ci
+        run: |
+          for f in $(ls src/main/resources/db/migration/V*__*.sql | sort -V); do
+            echo "==> $f"
+            psql -h localhost -U ci -d korepetavimas -v ON_ERROR_STOP=1 -f "$f"
+          done

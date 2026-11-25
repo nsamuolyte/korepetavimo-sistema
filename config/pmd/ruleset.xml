@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="Korepetavimo sistema"
+         xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 https://pmd.sourceforge.io/ruleset_2_0_0.xsd">
+
+    <description>
+        Kokybės vartai pagal ND1 metodiką.
+        1 prioritetas = galima klaida, build'as krenta.
+        3 prioritetas = pastaba ataskaitoje (target/pmd.xml).
+    </description>
+
+    <!-- 1 prioritetas: galimos klaidos -->
+    <rule ref="category/java/errorprone.xml/UseLocaleWithCaseConversions"><priority>1</priority></rule>
+    <rule ref="category/java/errorprone.xml/EmptyCatchBlock"><priority>1</priority></rule>
+    <rule ref="category/java/errorprone.xml/OverrideBothEqualsAndHashcode"><priority>1</priority></rule>
+    <rule ref="category/java/errorprone.xml/ReturnEmptyCollectionRatherThanNull"><priority>1</priority></rule>
+
+    <!-- 3 prioritetas: sudėtingumas ir dizainas -->
+    <rule ref="category/java/errorprone.xml/CloseResource"><priority>3</priority></rule>
+    <rule ref="category/java/design.xml/CyclomaticComplexity">
+        <priority>3</priority>
+        <properties>
+            <property name="methodReportLevel" value="10"/>
+            <property name="classReportLevel" value="80"/>
+        </properties>
+    </rule>
+    <rule ref="category/java/design.xml/CognitiveComplexity">
+        <priority>3</priority>
+        <properties><property name="reportLevel" value="15"/></properties>
+    </rule>
+    <rule ref="category/java/design.xml/NPathComplexity"><priority>3</priority></rule>
+    <rule ref="category/java/design.xml/GodClass"><priority>3</priority></rule>
+    <rule ref="category/java/design.xml/ExcessiveParameterList"><priority>3</priority></rule>
+    <rule ref="category/java/bestpractices.xml/UnusedPrivateField"><priority>3</priority></rule>
+    <rule ref="category/java/bestpractices.xml/UnusedPrivateMethod"><priority>3</priority></rule>
+    <rule ref="category/java/bestpractices.xml/UnusedLocalVariable"><priority>3</priority></rule>
+</ruleset>

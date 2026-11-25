@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.util.Locale;
 import java.util.UUID;
 
 /**
@@ -18,7 +19,7 @@ public class MockPaymentGateway implements PaymentGateway {
 
     @Override
     public String createSession(BigDecimal amount, String description) {
-        String id = "MOCK-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+        String id = "MOCK-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase(Locale.ROOT);
         log.info("Imituota mokėjimo sesija {} sukurta: {} EUR, {}", id, amount, description);
         return id;
     }
